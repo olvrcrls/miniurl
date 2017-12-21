@@ -83,7 +83,7 @@
                         <div class="col-md-6">
                             <input type="text" class="form-control" value="{{ old('urlAlias') }}"
                                     name="urlAlias" id="urlAlias" 
-                                    placeholder="example-article" 
+                                    placeholder="Example Title Here" 
                             >
                             @if ($errors->has('urlAlias'))
                                 <span class="help-block">

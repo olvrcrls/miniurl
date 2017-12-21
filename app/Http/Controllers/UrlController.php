@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Url as Link;
 class UrlController extends Controller
 {
     /**
@@ -23,18 +23,33 @@ class UrlController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        return $request->all();
+        $this->validate(request(), [
+            'originalUrl' => 'required',
+            'urlAlias' => 'string|nullable|unique:urls,name|max:30|min:5'
+        ]);
+
+        if (request()->has('urlAlias')) {
+            $new_link = Link::create([
+                'name' => request('urlAlias'),
+                'actualUrl' => request('originalUrl')
+            ]);
+        } else {
+            $generatedAlias = $this->generateRandomStrings();
+            $new_link = Link::create([
+                'name' => $generatedAlias,
+                'actualUrl' => request('originalUrl')
+            ]);
+        }
     }
 
     /**
@@ -80,5 +95,16 @@ class UrlController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function generateRandomStrings() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $strRandom = '';
+
+        for ($i = 0; $i <= 13; $i++) {
+            $strRandom = $characters[rand(0, strlen($characters))];
+        }
+
+        return $strRandom;
     }
 }
