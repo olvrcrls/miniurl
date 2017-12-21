@@ -13,9 +13,12 @@ class Url extends Model
     protected $guarded = [];
     protected $dates = ['created_at','updated_at','deleted_at'];
 
-    public function setActualUrlAttribute($value)
+    public function setNameAttribute($value)
     {
-    	$this->attributes['actual_url'] = str_slug($value);
+        $this->attributes['name'] = str_slug($value, '-');
+    }
+    public function getRouteKeyName() {
+    	return 'name';
     }
 
 }
